@@ -1,0 +1,38 @@
+@startuml
+
+actor User
+participant ReactFrontend
+participant API
+participant Backend
+
+User -> ReactFrontend: Submit YouTube URL
+ReactFrontend -> API: Check if PDF is ready
+API -> Backend: /get_pdf_if_ready
+Backend -> API: PDF Ready?
+API -> ReactFrontend: PDF Status
+
+alt PDF is ready
+    ReactFrontend -> API: Download PDF
+    API -> Backend: /download_pdf
+    Backend -> API: PDF File
+    API -> ReactFrontend: PDF File
+    ReactFrontend -> User: Show Download Button
+else PDF is not ready
+    ReactFrontend -> API: Start PDF Generation
+    API -> Backend: /generate_pdf
+    Backend -> API: Generation Started
+
+    loop Poll for PDF
+        ReactFrontend -> API: Check again
+        API -> Backend: /get_pdf_if_ready
+        Backend -> API: PDF Ready?
+    end
+
+    ReactFrontend -> API: Download PDF
+    API -> Backend: /download_pdf
+    Backend -> API: PDF File
+    API -> ReactFrontend: PDF File
+    ReactFrontend -> User: Show Download Button
+end
+
+@enduml
