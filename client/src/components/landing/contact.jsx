@@ -26,7 +26,7 @@ const Contact = () => {
     console.log('Form data:', formData); // Debug form data
 
     try {
-      const response = await instance.post('/api/user/contact', formData);
+      const response = await instance.post('/contact', formData);
       console.log('Response:', response); // Debug response
 
       if (response.status === 200) {
