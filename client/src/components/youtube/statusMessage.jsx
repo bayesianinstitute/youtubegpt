@@ -7,7 +7,7 @@ const StatusMessage = ({ loading, pdfReady }) => {
   }
 
   if (pdfReady) {
-    return <p className="status-message">Your PDF is ready!</p>;
+    return <p className="status-message">Your PDF is ready! Please check your email for the download link.</p>;
   }
 
   return null;

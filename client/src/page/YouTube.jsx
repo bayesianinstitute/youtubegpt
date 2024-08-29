@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import instance from '../config/instance';
-import YouTubeForm from '../components/youtube/youTubeForm';
-import StatusMessage from '../components/youtube/statusMessage';
-import DownloadButton from '../components/youtube/downloadButton';
-import Navigation from '../components/landing/navigation';
+import YouTubeForm from '../components/youtube/youTubeForm'; // Ensure correct import path
+import StatusMessage from '../components/youtube/statusMessage'; // Ensure correct import path
+import DownloadButton from '../components/youtube/downloadButton'; // Ensure correct import path
+import Navigation from '../components/landing/navigation'; // Ensure correct import path
 
 const YouTube = () => {
   const [videoUrl, setVideoUrl] = useState('');
+  const [email, setEmail] = useState('');
   const [pdfReady, setPdfReady] = useState(false);
   const [pdfUrl, setPdfUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -15,7 +16,6 @@ const YouTube = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
 
     setMessage('Checking if PDF is already available...');
 
@@ -28,18 +28,29 @@ const YouTube = () => {
       return;
     }
 
+    if (!validateEmail(email)) {
+      setMessage('Invalid email format. Please enter a valid email.');
+      setLoading(false);
+      return;
+    }
+
     try {
       // Step 1: Check if PDF is ready
       const pdfCheckResponse = await instance.get(`/get_pdf_if_ready?video_id=${videoId}`);
-      
 
       if (pdfCheckResponse.data.status === 200) {
-        // PDF is ready, fetch the download URL
-        fetchPdfUrl(videoId);
+        const s3Link = pdfCheckResponse.data.data.s3_link;
+        setPdfUrl(s3Link);
+        setPdfReady(true);
+        setMessage('PDF is ready to download.');
+
+        // Send email with attachment
+        await sendEmailWithAttachment(s3Link);
+
+        setLoading(false);
         return;
       }
 
-      // Step 2: PDF is not ready, get estimated time
       setMessage('PDF not ready. Estimating time...');
       const estimateResponse = await instance.get(`/get_estimated_time?video_id=${videoId}`);
 
@@ -49,9 +60,8 @@ const YouTube = () => {
         return;
       }
 
-      // Step 3: Start generating the PDF
       setMessage('Starting PDF generation...');
-      const generateResponse = await instance.post('/generate_pdf', { video_id: videoId });
+      const generateResponse = await instance.post('/generate_pdf', { video_id: videoId, email });
 
       if (generateResponse.data.status !== 200) {
         setMessage('Failed to start PDF generation. Please try again.');
@@ -59,17 +69,23 @@ const YouTube = () => {
         return;
       }
 
-      // Step 4: Polling to check if the PDF is ready
       setMessage('Generating PDF...');
       const interval = setInterval(async () => {
         const checkResponse = await instance.get(`/get_pdf_if_ready?video_id=${videoId}`);
 
         if (checkResponse.data.status === 200) {
-          // PDF is ready, fetch the download URL
           clearInterval(interval);
-          fetchPdfUrl(videoId);
+          const s3Link = checkResponse.data.data.s3_link;
+          setPdfUrl(s3Link);
+          setPdfReady(true);
+          setMessage('PDF is ready to download.');
+
+          // Send email with attachment
+          await sendEmailWithAttachment(s3Link);
+
+          setLoading(false);
         } else {
-          setMessage(checkResponse.data.message);  // "PDF is still being generated."
+          setMessage(checkResponse.data.message);
         }
       }, 3000);
       
@@ -80,26 +96,21 @@ const YouTube = () => {
     }
   };
 
-  const fetchPdfUrl = async (videoId) => {
+  const sendEmailWithAttachment = async (s3Link) => {
     try {
-      // Fetch the download URL from the server
-      const downloadResponse = await instance.get(`/download_pdf?video_id=${videoId}`, { responseType: 'blob' });
+      const response = await instance.post('/send_email_with_attachment', {
+        email: email,
+        pdfUrl: s3Link
+      });
 
-      if (downloadResponse.status === 200) {
-        // Create a URL from the response blob
-        const url = window.URL.createObjectURL(new Blob([downloadResponse.data], { type: 'application/pdf' }));
-        setPdfUrl(url);
-        setPdfReady(true);
-        setMessage('PDF is ready to download.');
+      if (response.data.status === 200) {
+        setMessage('Email sent successfully with the PDF attachment.');
       } else {
-        setMessage('Failed to fetch PDF. Please try again.');
+        setMessage('Failed to send email. Please try again.');
       }
-
-      setLoading(false);
     } catch (error) {
-      console.error('Error fetching PDF:', error);
-      setMessage('Error fetching PDF. Please try again later.');
-      setLoading(false);
+      console.error('Error sending email:', error);
+      setMessage('Error sending email. Please try again later.');
     }
   };
 
@@ -113,13 +124,25 @@ const YouTube = () => {
     }
   };
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   return (
     <div>
       <Navigation />
       <div className="youtube-page">
         <h1>YouTubeGPT</h1>
-        <YouTubeForm videoUrl={videoUrl} setVideoUrl={setVideoUrl} handleSubmit={handleSubmit} loading={loading} />
-        <StatusMessage loading={loading} message={message} />
+        <YouTubeForm
+          videoUrl={videoUrl}
+          setVideoUrl={setVideoUrl}
+          email={email}
+          setEmail={setEmail}
+          handleSubmit={handleSubmit}
+          loading={loading}
+        />
+        <StatusMessage loading={loading} pdfReady={pdfReady} />
         {pdfReady && <DownloadButton pdfUrl={pdfUrl} />}
       </div>
     </div>
