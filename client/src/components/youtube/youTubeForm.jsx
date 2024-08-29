@@ -21,7 +21,7 @@ const YouTubeForm = ({ videoUrl, setVideoUrl, email, setEmail, handleSubmit, loa
         className="form-input"
       />
       <button type="submit" disabled={loading || !videoUrl || !email} className="form-button">
-        {loading ? 'Generating...' : 'Generate PDF'}
+        {loading ? 'Generating...' : 'Generate Blog'}
       </button>
     </form>
   );

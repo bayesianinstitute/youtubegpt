@@ -5,7 +5,7 @@ const DownloadButton = ({ pdfUrl }) => {
   return (
     <div className="download-button">
       <a href={pdfUrl} download className="btn btn-primary">
-        Download PDF
+        Download BLOG
       </a>
     </div>
   );
