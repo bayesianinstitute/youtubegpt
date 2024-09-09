@@ -128,7 +128,7 @@ const YouTube = () => {
         toast.info('Fetching estimated transcription time...');
         const timeResponse = await instance.post('/get_estimated_time_with_transcript', {
           video_id: videoId,
-          user_upload_video: true,
+          user_upload_video: true
         });
 
         if (timeResponse.data.status === 200) {
@@ -189,7 +189,7 @@ const YouTube = () => {
             toast.success('Transcription completed.');
             const transcribeResponse = await instance.post('/get_estimated_time_with_transcript', {
               video_id: videoId,
-              user_upload_video: false,
+              user_upload_video: false
             });
 
             if (transcribeResponse.data.status === 200) {
