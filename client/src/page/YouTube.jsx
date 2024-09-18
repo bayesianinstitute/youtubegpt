@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // Import useEffect
 import instance from '../config/instance'; // Axios instance for API requests
 import StatusMessage from '../components/youtube/statusMessage'; // Ensure correct import path
 import DownloadButton from '../components/youtube/downloadButton'; // Ensure correct import path
-import Navigation from '../components/landing/navigation'; // Ensure correct import path
 import { toast, ToastContainer } from 'react-toastify'; // Import react-toastify
 import 'react-toastify/dist/ReactToastify.css'; // Import react-toastify CSS
+import Navigation from '../components/landing/navigationYoutube'; // Ensure correct import path
+import Footer from '../components/landing/footer'; // Import Footer component
 
 const YouTube = () => {
   const [videoUrl, setVideoUrl] = useState('');
@@ -88,7 +89,12 @@ const YouTube = () => {
       return '';
     }
   };
-
+  // Automatically fetch popular videos related to 'surfing' when the component mounts
+    useEffect(() => {
+      console.log('Fetching popular videos...');
+      fetchPopularVideos('browse');
+    }, []); // Empty dependency array to run only on mount
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -453,6 +459,7 @@ const YouTube = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -1,0 +1,55 @@
+/* Custom Contact form styling */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .contact-form .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .contact-form .form-control {
+    width: 100%;
+    padding: 15px; /* Increase padding for larger text boxes */
+    font-size: 18px; /* Increase font size for better readability */
+    border: 1px solid #ccc;
+    border-radius: 25px; /* Add rounded corners */
+    background-color: #f9f9f9; /* Light background for a cleaner look */
+  }
+  
+  .contact-form textarea.form-control {
+    height: 150px; /* Set a larger height for the textarea */
+    resize: none; /* Disable resize to maintain consistent styling */
+  }
+  
+  .contact-form .btn {
+    background-color: #007bff; /* Primary blue color */
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 50px; /* Rounded button */
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%; /* Make the button full width */
+  }
+  
+  .contact-form .btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      padding: 10px;
+    }
+  
+    .contact-form .form-control {
+      font-size: 16px; /* Adjust font size for smaller screens */
+      padding: 10px;
+    }
+  
+    .contact-form textarea.form-control {
+      height: 120px;
+    }
+  }
+  

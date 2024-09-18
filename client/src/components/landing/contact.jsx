@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import instance from '../../config/instance';
+import '../../css/contact.css'; // Import the custom CSS file
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -26,10 +27,10 @@ const Contact = () => {
     console.log('Form data:', formData); // Debug form data
 
     try {
-      const response = await instance.post('/contact', formData);
+      const response = await instance.post(`${process.env.REACT_APP_API_BASE_URL}/user/contact`, formData);
       console.log('Response:', response); // Debug response
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         toast.success('Thank you! Your message has been sent.');
         setFormData({ name: '', email: '', message: '' }); // Clear the form
       } else {
@@ -48,7 +49,7 @@ const Contact = () => {
       <div className="container">
         <h2>Contact Us</h2>
         <p>Have questions? Get in touch with us.</p>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="contact-form">
           <div className="form-group">
             <input
               type="text"
