@@ -411,7 +411,7 @@ const YouTube = () => {
 
         {/* Render popular video summaries */}
         <div style={{ marginTop: '30px' }}>
-          <h3 style={{ marginBottom: '20px' }}>Popular Videos</h3>
+          <h3 style={{ marginBottom: '20px' }}>Fetch videos based on keywords</h3>
           <div
             style={{
               display: 'flex',
@@ -454,7 +454,7 @@ const YouTube = () => {
                 </div>
               ))
             ) : (
-              <p>No popular videos found.</p>
+              <p>No videos found.</p>
             )}
           </div>
         </div>
