@@ -3,22 +3,22 @@ import React from 'react';
 const Testimonials = () => {
   const testimonialsData = [
     {
-      quote: "YouTubeGPT has significantly improved my learning efficiency. The video summaries save me so much time!",
-      name: "Alice Johnson",
-      position: "Content Creator",
+      quote: "YouTubeGPT has revolutionized how I create content. Turning my YouTube videos into detailed blog posts is now faster and more efficient than ever!",
+      name: "John Doe",
+      position: "YouTuber & Blogger",
     },
     {
-      quote: "As a researcher, YouTubeGPT's chapter segmentation feature is invaluable. It helps me find the exact content I need quickly.",
-      name: "Michael Lee",
-      position: "Research Analyst",
+      quote: "The technology behind YouTubeGPT has saved me countless hours. I can quickly extract key information from videos without watching the entire thing.",
+      name: "Sarah Williams",
+      position: "Tech Enthusiast",
     },
     {
-      quote: "I love using YouTubeGPT to get the key points from lengthy videos. It's like having a personal video assistant.",
-      name: "Emily Davis",
-      position: "Student",
+      quote: "Thanks to YouTubeGPT's multilingual support, I can now understand and summarize videos in multiple languages, which has expanded my learning resources globally.",
+      name: "Carlos Martínez",
+      position: "Language Learner",
     }
   ];
-
+  
   return (
     <section id="testimonials" className="testimonials-section">
       <div className="container">

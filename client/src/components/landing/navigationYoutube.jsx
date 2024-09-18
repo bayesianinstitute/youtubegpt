@@ -64,7 +64,7 @@ const Navigation = () => {
             <a className="nav-link" href="/contact">Contact</a>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/youtube">YoutubeGPT</Link>
+            <Link className="nav-link" to="/youtube">Try Beta</Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" onClick={handleLogout}> Logout</Link>
