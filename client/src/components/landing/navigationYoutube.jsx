@@ -9,7 +9,7 @@ const Navigation = () => {
   // Handle logout
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/v1/user/logout', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/user/logout`, {
         method: 'GET',
         credentials: 'include',
       });
