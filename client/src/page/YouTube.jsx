@@ -18,6 +18,59 @@ const YouTube = () => {
   const [estimatedTime, setEstimatedTime] = useState(null); // Estimated time for transcription
   const [videoSummaries, setVideoSummaries] = useState([]); // Store popular video summaries
   const [isUploading, setIsUploading] = useState(false); // Toggle between YouTube URL and upload
+  
+  const hardcodedVideos = [
+    {
+      videoid: '2qlcY9LkFik',
+      high: 'https://img.youtube.com/vi/2qlcY9LkFik/hqdefault.jpg',
+      title: 'Software Planning and Technical Documentation',
+    },
+    {
+      videoid: 'SaCYkPD4_K0',
+      high: 'https://img.youtube.com/vi/SaCYkPD4_K0/hqdefault.jpg',
+      title: 'Software Development Life Cycle: Explained',
+    },
+    {
+      videoid: 'vyQv563Y-fk',
+      high: 'https://img.youtube.com/vi/vyQv563Y-fk/hqdefault.jpg',
+      title: 'You probably won’t survive 2024... Top 10 Tech Trends',
+    },
+    {
+      videoid: 'F_Riqjdh2oM',
+      high: 'https://img.youtube.com/vi/F_Riqjdh2oM/hqdefault.jpg',
+      title: 'Quantum Computing for Computer Scientists',
+    },
+    {
+      videoid: 'hdI2bqOjy3c',
+      high: 'https://img.youtube.com/vi/hdI2bqOjy3c/hqdefault.jpg',
+      title: 'Building a Web App with React and Node.js',
+    },
+    {
+      videoid: '5sLYAQS9sWQ',
+      high: 'https://img.youtube.com/vi/5sLYAQS9sWQ/hqdefault.jpg',
+      title: 'How Large Language Models Work',
+    },
+    {
+      videoid: 'cfqtFvWOfg0',
+      high: 'https://img.youtube.com/vi/cfqtFvWOfg0/hqdefault.jpg',
+      title: 'Why Large Language Models Hallucinate',
+    },
+    {
+      videoid: 'bBC-nXj3Ng4',
+      high: 'https://img.youtube.com/vi/bBC-nXj3Ng4/hqdefault.jpg',
+      title: 'Blockchain and Cryptocurrencies Explained',
+    },
+    {
+      videoid: 'pX2zvfD6GCY',
+      high: 'https://img.youtube.com/vi/pX2zvfD6GCY/hqdefault.jpg',
+      title: 'Zuckerberg and Senator Hawley clash in fiery child safety hearing',
+    },
+    {
+      videoid: 'X48VuDVv0do',
+      high: 'https://img.youtube.com/vi/X48VuDVv0do/hqdefault.jpg',
+      title: 'Introduction to Kubernetes',
+    },
+  ];
 
   let cleanUrl;
 
@@ -454,7 +507,39 @@ const YouTube = () => {
                 </div>
               ))
             ) : (
-              <p>No videos found.</p>
+              // Show hardcoded videos if no videos are fetched
+              hardcodedVideos.map((video, index) => (
+                <div
+                  key={index}
+                  style={{
+                    backgroundColor: '#fff',
+                    padding: '15px',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                    marginBottom: '20px',
+                    flex: '1 1 calc(33.33% - 20px)',
+                    maxWidth: '300px',
+                    textAlign: 'left',
+                    boxSizing: 'border-box',
+                  }}
+                >
+                  <a
+                    href={`https://www.youtube.com/watch?v=${video.videoid}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                  >
+                    <img
+                      src={video.high}
+                      alt={video.title}
+                      style={{ width: '100%', borderRadius: '8px', marginBottom: '10px' }}
+                    />
+                    <h4 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '5px' }}>
+                      {video.title}
+                    </h4>
+                  </a>
+                </div>
+              ))
             )}
           </div>
         </div>
