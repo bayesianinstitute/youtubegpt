@@ -143,10 +143,10 @@ const YouTube = () => {
     }
   };
   // Automatically fetch popular videos related to 'surfing' when the component mounts
-    useEffect(() => {
-      console.log('Fetching popular videos...');
-      fetchPopularVideos('browse');
-    }, []); // Empty dependency array to run only on mount
+    // useEffect(() => {
+    //   console.log('Fetching popular videos...');
+    //   fetchPopularVideos('browse');
+    // }, []); // Empty dependency array to run only on mount
   
   const handleSubmit = async (e) => {
     e.preventDefault();
