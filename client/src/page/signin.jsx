@@ -57,8 +57,8 @@ const Signin = () => {
         setLoading(false);
       
         // Set token in localStorage or cookies if needed
-        localStorage.setItem('token', data.token);
-      
+        localStorage.setItem('token', data.data.token);
+        // localStorage.setItem('email', data.data.user.email);
         // Redirect to /youtube after successful login using navigate
         setTimeout(() => {
           navigate('/youtube'); // Use navigate for client-side routing

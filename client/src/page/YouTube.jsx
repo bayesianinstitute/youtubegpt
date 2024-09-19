@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // Import useEffect
+import React, { useState, useEffect } from 'react'; // Import useEffect
 import instance from '../config/instance'; // Axios instance for API requests
 import StatusMessage from '../components/youtube/statusMessage'; // Ensure correct import path
 import DownloadButton from '../components/youtube/downloadButton'; // Ensure correct import path
@@ -6,6 +6,7 @@ import { toast, ToastContainer } from 'react-toastify'; // Import react-toastify
 import 'react-toastify/dist/ReactToastify.css'; // Import react-toastify CSS
 import Navigation from '../components/landing/navigationYoutube'; // Ensure correct import path
 import Footer from '../components/landing/footer'; // Import Footer component
+import { jwtDecode } from 'jwt-decode';
 
 const YouTube = () => {
   const [videoUrl, setVideoUrl] = useState('');
@@ -74,7 +75,28 @@ const YouTube = () => {
 
   let cleanUrl;
 
+  useEffect(() => {
+    // Fetch email from token when component mounts
+    const token = localStorage.getItem('token');
+    try {
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        console.log("Decoded TOken",decodedToken);
+        setEmail(decodedToken.email);
+      } else {
+        // Provide a dummy email directly if no token is found
+        setEmail('dummy@example.com'); // Use a dummy email for testing
+        console.log('Using a dummy email for now');
+      }
+    } catch (error) {
+      console.error('Invalid token:', error);
+      toast.error('Invalid token. Please log in.');
+      // Optionally, set a fallback or dummy email for testing
+      setEmail('fallback@example.com');
+    }
+  }, []);
   // Toggle between URL input and video upload input
+  
   const handleToggle = () => {
     setIsUploading(!isUploading);
     setUploadedFile(null);
@@ -218,12 +240,6 @@ const YouTube = () => {
         return;
       }
 
-      if (!validateEmail(email)) {
-        setMessage('Invalid email format. Please enter a valid email address.');
-        setLoading(false);
-        toast.error('Invalid email format.');
-        return;
-      }
 
       try {
         setMessage('Checking if captions are available...');
@@ -341,10 +357,10 @@ const YouTube = () => {
   };
 
   // Utility function to validate email format
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  // const validateEmail = (email) => {
+  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   return emailRegex.test(email);
+  // };
 
   return (
     <div>
@@ -416,24 +432,6 @@ const YouTube = () => {
           </div>
         )}
 
-        {/* Email input */}
-        <div style={{ marginTop: '15px' }}>
-          <label htmlFor="email">Enter your email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{
-              width: '100%',
-              padding: '10px',
-              margin: '10px 0',
-              borderRadius: '5px',
-              border: '1px solid #ccc',
-            }}
-          />
-        </div>
 
         {/* Generate Blog button */}
         <button
