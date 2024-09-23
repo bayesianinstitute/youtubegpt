@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css'; // Import react-toastify CSS
 import Navigation from '../components/landing/navigationYoutube'; // Ensure correct import path
 import Footer from '../components/landing/footer'; // Import Footer component
 import { jwtDecode } from 'jwt-decode';
+import Modal from 'react-modal'; // Import React Modal
 
 const YouTube = () => {
   const [videoUrl, setVideoUrl] = useState('');
@@ -17,10 +18,12 @@ const YouTube = () => {
   const [message, setMessage] = useState('');
   const [uploadedFile, setUploadedFile] = useState(null); // Handle file upload
   const [estimatedTime, setEstimatedTime] = useState(null); // Estimated time for transcription
-  const [videoSummaries, setVideoSummaries] = useState([]); // Store popular video summaries
+  const [videoSummaries, setVideoSummaries] = useState([]); // eslint-disable-next-line no-unused-vars
   const [isUploading, setIsUploading] = useState(false); // Toggle between YouTube URL and upload
-  
-  const hardcodedVideos = [
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentVideoId, setCurrentVideoId] = useState(null);
+
+  const [hardcodedVideos] = useState([
     {
       videoid: '2qlcY9LkFik',
       high: 'https://img.youtube.com/vi/2qlcY9LkFik/hqdefault.jpg',
@@ -71,7 +74,8 @@ const YouTube = () => {
       high: 'https://img.youtube.com/vi/X48VuDVv0do/hqdefault.jpg',
       title: 'Introduction to Kubernetes',
     },
-  ];
+  ]);
+
 
   let cleanUrl;
 
@@ -104,7 +108,16 @@ const YouTube = () => {
     setEstimatedTime(null);
     setVideoSummaries([]); // Clear video summaries when switching modes
   };
+  // Handle modal open and close
+  const openModal = (videoId) => {
+    setCurrentVideoId(videoId);
+    setIsModalOpen(true);
+  };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setCurrentVideoId(null);
+  };
   // Utility function to extract video ID from YouTube URL
   const extractVideoId = (url) => {
     try {
@@ -148,6 +161,23 @@ const YouTube = () => {
     }
   };
 
+    // Function to update keywords in the database (Case 3)
+  const updateKeywordsInDB = async (keywords) => {
+      try {
+        const response = await instance.post('http://127.0.0.1:5000/api/v1/user/updateKeywords', {
+          email: email,
+          keywords: keywords,
+        });
+        if (response.data.success) {
+          console.log('Keywords updated successfully!');
+        } else {
+          console.error('Failed to update keywords in the database');
+        }
+      } catch (error) {
+        console.error('Error updating keywords in the database:', error);
+      }
+    };
+  
   const fetchKeywords = async (videoId) => {
     try {
       const response = await instance.get(`/youtube/tags?video_id=${videoId}`);
@@ -170,8 +200,13 @@ const YouTube = () => {
     //   fetchPopularVideos('browse');
     // }, []); // Empty dependency array to run only on mount
   
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (url, e = null) => {
+    console.log(videoSummaries); 
+    console.log('Submit',url, e);
+      if (e) {
+        e.preventDefault(); // Only prevent default if e is provided (i.e., from a form submission)
+      }
+    setVideoUrl(url);
     setLoading(true);
     setMessage('Processing your request...');
 
@@ -463,84 +498,91 @@ const YouTube = () => {
         {/* Render popular video summaries */}
         <div style={{ marginTop: '30px' }}>
           <h3 style={{ marginBottom: '20px' }}>Fetch videos based on keywords</h3>
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              gap: '20px',
-            }}
-          >
-            {videoSummaries.length > 0 ? (
-              videoSummaries.map((video, index) => (
-                <div
-                  key={index}
-                  style={{
-                    backgroundColor: '#fff',
-                    padding: '15px',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                    marginBottom: '20px',
-                    flex: '1 1 calc(33.33% - 20px)',
-                    maxWidth: '300px',
-                    textAlign: 'left',
-                    boxSizing: 'border-box',
-                  }}
-                >
-                  <a
-                    href={`https://www.youtube.com/watch?v=${video.videoid}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ textDecoration: 'none', color: 'inherit' }}
-                  >
-                    <img
-                      src={video.high}
-                      alt={video.title}
-                      style={{ width: '100%', borderRadius: '8px', marginBottom: '10px' }}
-                    />
-                    <h4 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '5px' }}>
-                      {video.title}
-                    </h4>
-                  </a>
-                </div>
-              ))
-            ) : (
-              // Show hardcoded videos if no videos are fetched
-              hardcodedVideos.map((video, index) => (
-                <div
-                  key={index}
-                  style={{
-                    backgroundColor: '#fff',
-                    padding: '15px',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                    marginBottom: '20px',
-                    flex: '1 1 calc(33.33% - 20px)',
-                    maxWidth: '300px',
-                    textAlign: 'left',
-                    boxSizing: 'border-box',
-                  }}
-                >
-                  <a
-                    href={`https://www.youtube.com/watch?v=${video.videoid}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ textDecoration: 'none', color: 'inherit' }}
-                  >
-                    <img
-                      src={video.high}
-                      alt={video.title}
-                      style={{ width: '100%', borderRadius: '8px', marginBottom: '10px' }}
-                    />
-                    <h4 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '5px' }}>
-                      {video.title}
-                    </h4>
-                  </a>
-                </div>
-              ))
-            )}
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px' }}>
+            {hardcodedVideos.map((video, index) => (
+              <div key={index} style={{ backgroundColor: '#fff', padding: '15px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', marginBottom: '20px', flex: '1 1 calc(33.33% - 20px)', maxWidth: '300px', textAlign: 'left', boxSizing: 'border-box' }}>
+                <a href={`https://www.youtube.com/watch?v=${video.videoid}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <img src={video.high} alt={video.title} style={{ width: '100%', borderRadius: '8px', marginBottom: '10px' }} />
+                  <h4 style={{ fontSize: '1.2rem', color: '#333', marginBottom: '5px' }}>{video.title}</h4>
+                </a>
+
+                {/* Play and Blog Buttons */}
+                <button onClick={() => openModal(video.videoid)} style={{ marginRight: '10px', padding: '5px 10px', backgroundColor: '#5cb85c', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+                  Play
+                </button>
+                <button onClick={() => handleSubmit(`https://www.youtube.com/watch?v=${video.videoid}`)} 
+                style={{ padding: '5px 10px', backgroundColor: '#0275d8', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+                Blog
+              </button>
+
+              </div>
+            ))}
           </div>
         </div>
+
+        {/* Modal for Playing Video */}
+        <Modal 
+          isOpen={isModalOpen} 
+          onRequestClose={closeModal} ariaHideApp={false}
+          style={{
+            content: {
+              maxWidth: '80%',  // Responsive width
+              width: '100%',
+              height: 'auto',  // Allow auto height for responsiveness
+              margin: '0 auto',  // Center the modal horizontally
+              padding: '0',  // Remove unnecessary padding
+              borderRadius: '8px',  // Add slight rounding to the modal
+              border: 'none',  // Remove default border
+              overflow: 'hidden',  // Prevent overflow outside the modal
+              position: 'relative',  // Ensure "Close" button can be positioned absolutely
+            },
+            overlay: {
+              backgroundColor: 'rgba(0, 0, 0, 0.75)',  // Add a background overlay
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',  // Center modal vertically and horizontally
+            },
+          }}
+        >
+          {/* Close button positioned below the video */}
+          <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
+            <button 
+              onClick={closeModal} 
+              style={{
+                padding: '5px 10px', 
+                backgroundColor: 'red', 
+                color: 'white', 
+                border: 'none', 
+                cursor: 'pointer', 
+                fontSize: '16px',
+                borderRadius: '5px'
+              }}
+            >
+              Close
+            </button>
+          </div>
+
+          {/* Embed the YouTube video */}
+          <div style={{ width: '100%', paddingBottom: '56.25%', position: 'relative' }}> {/* Aspect ratio for responsiveness */}
+            <iframe
+              width="100%" 
+              height="100%" 
+              src={`https://www.youtube.com/embed/${currentVideoId}`} 
+              frameBorder="0" 
+              allow="autoplay; encrypted-media" 
+              allowFullScreen
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',  // Make iframe responsive
+              }}
+              title={`YouTube video player for ${currentVideoId}`} 
+            ></iframe>
+          </div>
+        </Modal>
+
       </div>
       <Footer />
     </div>
