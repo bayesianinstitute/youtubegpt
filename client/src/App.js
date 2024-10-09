@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './page/home';
-import YouTube from './page/YouTube';
+import Vlearn from './page/Vlearn';
 import Signup from './page/signup';
 import Signin from './page/signin';
 import ResetPassword from './page/resetPassword.jsx';
@@ -28,10 +28,10 @@ function App() {
           
           {/* Protected Route for YouTube */}
           <Route 
-            path="/youtube" 
+            path="/vlearn" 
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated} redirect="/signin">
-                <YouTube />
+                <Vlearn />
               </ProtectedRoute>
             } 
           />
@@ -47,9 +47,9 @@ function App() {
           ) : (
             // Redirect authenticated users away from auth pages
             <>
-              <Route path="/signup" element={<Navigate to="/youtube" />} />
-              <Route path="/signin" element={<Navigate to="/youtube" />} />
-              <Route path="/forgotpassword" element={<Navigate to="/youtube" />} />
+              <Route path="/signup" element={<Navigate to="/vlearn" />} />
+              <Route path="/signin" element={<Navigate to="/vlearn" />} />
+              <Route path="/forgotpassword" element={<Navigate to="/vlearn" />} />
               <Route path="/reset/:token" element={<ResetPassword />} />
             </>
           )}

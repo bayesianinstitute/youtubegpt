@@ -43,7 +43,7 @@ const Navigation = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light">
       <Link className="navbar-brand" to="/home">
-        <img src="youtube-gpt-logo.png" alt="YouTubeGPT Logo" className="logo" />
+        <img src="youtube-gpt-logo.png" alt="VLearn" className="logo" />
       </Link>
 
       <div className="collapse navbar-collapse" id="navbarNav">
@@ -64,7 +64,7 @@ const Navigation = () => {
             <a className="nav-link" href="/contact">Contact</a>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/youtube">Try Beta</Link>
+            <Link className="nav-link" to="/vlearn">Try Beta</Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" onClick={handleLogout}> Logout</Link>

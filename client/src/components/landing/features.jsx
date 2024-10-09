@@ -5,7 +5,7 @@ const Features = () => {
     <section id="feature" className="text-center">
       <div className="container">
         <h2>Features</h2>
-        <p>Discover the powerful features that make YouTubeGPT the ultimate tool for video learning and summarization.</p>
+        <p>Discover the powerful features that make VLearn the ultimate tool for video learning and summarization.</p>
         <div className="row">
           <div className="col-md-4">
             <i className="fa fa-file-alt"></i>

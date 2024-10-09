@@ -6,9 +6,9 @@ const Footer = () => {
       <div className="container">
         <div className="footer-content">
           <div className="footer-section about">
-            <h2>About YouTubeGPT</h2>
+            <h2>About VLearn</h2>
             <p>
-              YouTubeGPT simplifies video learning by providing concise summaries, chapter segmentation, and visual highlights from YouTube videos. Our platform utilizes cutting-edge AI technology to transform complex video content into accessible and easy-to-digest information, enhancing your learning experience.
+             VLearn simplifies video learning by providing concise summaries, chapter segmentation, and visual highlights from YouTube videos. Our platform utilizes cutting-edge AI technology to transform complex video content into accessible and easy-to-digest information, enhancing your learning experience.
             </p>
           </div>
 
@@ -20,7 +20,7 @@ const Footer = () => {
               <li><a href="/features">Features</a></li>
               <li><a href="/testimonials">Testimonials</a></li>
               <li><a href="/contact">Contact</a></li>
-              <li><a href="/youtube">YoutubeGPT</a></li>
+              <li><a href="/vlearn">VLearn</a></li>
             </ul>
           </div>
 
@@ -37,7 +37,7 @@ const Footer = () => {
         </div>
 
         <div className="footer-bottom">
-          &copy; {new Date().getFullYear()} YouTubeGPT | All Rights Reserved
+          &copy; {new Date().getFullYear()}VLearn | All Rights Reserved
         </div>
       </div>
     </footer>

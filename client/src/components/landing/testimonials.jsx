@@ -3,17 +3,17 @@ import React from 'react';
 const Testimonials = () => {
   const testimonialsData = [
     {
-      quote: "YouTubeGPT has revolutionized how I create content. Turning my YouTube videos into detailed blog posts is now faster and more efficient than ever!",
+      quote: "VLearnhas revolutionized how I create content. Turning my YouTube videos into detailed blog posts is now faster and more efficient than ever!",
       name: "John Doe",
       position: "YouTuber & Blogger",
     },
     {
-      quote: "The technology behind YouTubeGPT has saved me countless hours. I can quickly extract key information from videos without watching the entire thing.",
+      quote: "The technology behindVLearn has saved me countless hours. I can quickly extract key information from videos without watching the entire thing.",
       name: "Sarah Williams",
       position: "Tech Enthusiast",
     },
     {
-      quote: "Thanks to YouTubeGPT's multilingual support, I can now understand and summarize videos in multiple languages, which has expanded my learning resources globally.",
+      quote: "Thanks toVLearn's multilingual support, I can now understand and summarize videos in multiple languages, which has expanded my learning resources globally.",
       name: "Carlos Martínez",
       position: "Language Learner",
     }

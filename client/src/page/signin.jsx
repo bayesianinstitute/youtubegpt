@@ -59,10 +59,10 @@ const Signin = () => {
         // Set token in localStorage or cookies if needed
         localStorage.setItem('token', data.data.token);
         // localStorage.setItem('email', data.data.user.email);
-        // Redirect to /youtube after successful login using navigate
+        // Redirect to /vlearn after successful login using navigate
         setTimeout(() => {
-          navigate('/youtube'); // Use navigate for client-side routing
-          window.location.href = '/youtube'; 
+          navigate('/vlearn'); // Use navigate for client-side routing
+          window.location.href = '/vlearn'; 
         }, 2000);
       } else {
         // If user data is missing, handle it gracefully
